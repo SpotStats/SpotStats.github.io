@@ -55,9 +55,24 @@
         var accessToken = params.get("access_token");
         getUserInfo(accessToken);
       }
+
+      // Função para verificar se o usuário está autenticado e atualizar a página com as informações do usuário
+      function checkAuth() {
+        var hash = window.location.hash.substr(1);
+        var params = new URLSearchParams(hash);
+        var accessToken = params.get("access_token");
+
+        if (accessToken) {
+          // Se o usuário estiver autenticado, exibe as informações do usuário
+          getUserInfo(accessToken);
+        } else {
+          // Se o usuário não estiver autenticado, redireciona para a página de autenticação do Spotify
+          window.location = AUTH_URL;
+        }
+      }
     </script>
   </head>
-  <body>
+  <body onload="checkAuth()">
     <h1>Exemplo de acesso à API do Spotify</h1>
     <button onclick="loginWithSpotify()">Fazer login com o Spotify</button>
     <div id="name"></div>
