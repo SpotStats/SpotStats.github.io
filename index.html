@@ -12,6 +12,7 @@
     <script>
       const CLIENT_ID = "abd56c0e24804d10b839beaecf38d2fc";
       const REDIRECT_URI = "https://spotstats.github.io/"; // Coloque aqui a URL da sua aplicação
+      const CLIENT_SECRET = "abd56c0e24804d10b839beaecf38d2fc";
       const SCOPES = "user-read-private user-read-email";
 
       function authenticate() {
@@ -43,8 +44,7 @@
             localStorage.setItem("access_token", data.access_token);
             localStorage.setItem("expires_in", data.expires_in);
             localStorage.setItem("refresh_token", data.refresh_token);
-            window.location.href = REDIRECT_URI;
-          })
+        })
           .catch((error) => console.error(error));
       }
 
