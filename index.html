@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Spotify API</title>
+  </head>
+  <body>
+    <h1>Spotify API</h1>
+    <button onclick="authenticate()">Autenticar</button>
+    <button onclick="getUser()">Obter informações do usuário</button>
+
+    <script>
+      const CLIENT_ID = "abd56c0e24804d10b839beaecf38d2fc";
+      const REDIRECT_URI = "https://spotstats.github.io/"; // Coloque aqui a URL da sua aplicação
+      const SCOPES = "user-read-private user-read-email";
+
+      function authenticate() {
+        const url = `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&response_type=code&redirect_uri=${encodeURIComponent(
+          REDIRECT_URI
+        )}&scope=${encodeURIComponent(SCOPES)}`;
+        window.location.href = url;
+      }
+
+      function getToken(code) {
+        const headers = {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Basic ${btoa(`${CLIENT_ID}:${CLIENT_SECRET}`)}`,
+        };
+
+        const body = {
+          grant_type: "authorization_code",
+          code: code,
+          redirect_uri: REDIRECT_URI,
+        };
+
+        fetch(`https://accounts.spotify.com/api/token`, {
+          method: "POST",
+          headers: headers,
+          body: new URLSearchParams(body),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            localStorage.setItem("access_token", data.access_token);
+            localStorage.setItem("expires_in", data.expires_in);
+            localStorage.setItem("refresh_token", data.refresh_token);
+            window.location.href = REDIRECT_URI;
+          })
+          .catch((error) => console.error(error));
+      }
+
+      function getUser() {
+        const accessToken = localStorage.getItem("access_token");
+
+        fetch("https://api.spotify.com/v1/me", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => console.log(data))
+          .catch((error) => console.error(error));
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("code");
+      if (code) {
+        getToken(code);
+      }
+    </script>
+  </body>
+</html>
