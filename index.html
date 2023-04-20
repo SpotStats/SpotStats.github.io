@@ -8,9 +8,10 @@
     <h1>Spotify API</h1>
     <button onclick="authenticate()">Autenticar</button>
     <button onclick="getUser()">Obter informações do usuário</button>
+    <div id="user-info"></div>
 
     <script>
-      const CLIENT_ID = "abd56c0e24804d10b839beaecf38d2fc";
+      const CLIENT_ID = "8c33166ce6ca49dd9965dce307849487";
       const REDIRECT_URI = "https://spotstats.github.io/"; // Coloque aqui a URL da sua aplicação
       const CLIENT_SECRET = "abd56c0e24804d10b839beaecf38d2fc";
       const SCOPES = "user-read-private user-read-email";
@@ -44,7 +45,8 @@
             localStorage.setItem("access_token", data.access_token);
             localStorage.setItem("expires_in", data.expires_in);
             localStorage.setItem("refresh_token", data.refresh_token);
-        })
+            getUser();
+          })
           .catch((error) => console.error(error));
       }
 
@@ -57,7 +59,10 @@
           },
         })
           .then((response) => response.json())
-          .then((data) => console.log(data))
+          .then((data) => {
+            const userInfoDiv = document.getElementById("user-info");
+            userInfoDiv.innerHTML = `<p>Nome do usuário: ${data.display_name}</p><p>Email do usuário: ${data.email}</p>`;
+          })
           .catch((error) => console.error(error));
       }
 
