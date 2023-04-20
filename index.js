@@ -1,5 +1,5 @@
-const CLIENT_ID = "seu-client-id-aqui";
-const REDIRECT_URI = "http://localhost:8000/callback.html";
+const CLIENT_ID = "8c33166ce6ca49dd9965dce307849487";
+const REDIRECT_URI = "https://spotstats.github.io/";
 
 function getToken() {
   const params = new URLSearchParams(window.location.search);
